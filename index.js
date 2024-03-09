@@ -4,10 +4,13 @@ const app = express()
 const PORT = 3000
 
 import userRouter from "./users.js";
+import verifyToken from './userauth.js';
 
-app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.json());
 
 app.use("/users", userRouter);
+
+app.use(verifyToken);
 
 app.get('/', function (req, res) {
     res.send('Hello World')

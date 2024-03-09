@@ -55,7 +55,8 @@ router.get("/login", async (req, res) => {
     }
 
     const userQueryResult = await db.select().table("users").where({ username: req.body.username }).first();
-    if (userQueryResult.length < 1) {
+    const userNotExist = userQueryResult.length < 1
+    if (userNotExist) {
         res.status(400).send("Username not found");
         return;
     }
@@ -67,7 +68,9 @@ router.get("/login", async (req, res) => {
         return;
     }
 
-    const userId = userQueryResult['id']
+    const userId = userQueryResult['id'];
+
+    await deleteExistingTokens(userId);
     const token = await generateToken(userId);
 
     res.status(200).send({ token });
@@ -83,7 +86,8 @@ router.post("/register", async (req, res) => {
     }
 
     const userQueryResult = await db.select().table("users").where({ username: req.body.username });
-    if (userQueryResult.length > 0) {
+    const userAlreadyExists = userQueryResult.length > 0
+    if (userAlreadyExists) {
         res.status(400).send("Username already registered");
         return;
     }
@@ -94,6 +98,7 @@ router.post("/register", async (req, res) => {
 
     const userId = await db("users").insert(newUser).returning("id");
 
+    await deleteExistingTokens(userId);
     const token = await generateToken(userId);
 
     res.status(201).send({ token });
@@ -104,11 +109,16 @@ const generateToken = async (userId) => {
     const token = randomHalfToken() + randomHalfToken();
 
     const THREEHOURS = 3 * 60 * 60 * 1000;
+    const FIVESECONDS = 5 * 1000;
     let expiryDate = new Date();
-    expiryDate.setTime(expiryDate.getTime() + THREEHOURS);
+    expiryDate.setTime(expiryDate.getTime() + FIVESECONDS);
 
     await db("tokens").insert({ token, userId, expiryDate });
     return token;
+}
+
+const deleteExistingTokens = async (userId) => {
+    await db("tokens").where({ userId }).delete();
 }
 
 export default router;
