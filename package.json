@@ -4,9 +4,8 @@
   "description": "simple chat server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "type": "module",
   "author": "OmarQurashi868",
   "license": "ISC",
   "dependencies": {
@@ -16,5 +15,8 @@
     "sqlite3": "^5.1.7",
     "zod": "^3.22.4",
     "zod-validation-error": "^3.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

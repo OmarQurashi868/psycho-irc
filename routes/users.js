@@ -1,8 +1,8 @@
-import express from 'express';
-import bcrypt from 'bcrypt';
-import { z } from 'zod';
-import { fromZodError } from 'zod-validation-error';
-import knex from 'knex'
+const express = require('express');
+const bcrypt = require('bcrypt');
+const { z } = require('zod');
+const { fromZodError } = require('zod-validation-error');
+const knex = require('knex');
 
 const SALTROUNDS = 10;
 const router = express.Router();
@@ -14,23 +14,6 @@ const db = knex({
     },
     useNullAsDefault: true,
 });
-
-const userTableExists = await db.schema.hasTable("users")
-if (!userTableExists)
-    await db.schema.createTable("users", (table) => {
-        table.increments("id");
-        table.string("username");
-        table.string("password");
-    })
-
-const tokenTableExists = await db.schema.hasTable("tokens")
-if (!tokenTableExists)
-    await db.schema.createTable("tokens", (table) => {
-        table.increments("id");
-        table.string("token");
-        table.bigint("userId");
-        table.dateTime("expiryDate");
-    })
 
 
 const registerUserSchema = z.object({
@@ -45,26 +28,26 @@ const loginUserSchema = z.object({
     password: z.string()
 });
 
-router.get("/login", async (req, res) => {
+const loginUser = async (req, res) => {
     try {
         loginUserSchema.parse(req.body);
     } catch (err) {
         const validationError = fromZodError(err).toString();
-        res.status(400).send(validationError);
+        res.status(400).send({ message: validationError });
         return
     }
 
     const userQueryResult = await db.select().table("users").where({ username: req.body.username }).first();
     const userNotExist = userQueryResult.length < 1
     if (userNotExist) {
-        res.status(400).send("Username not found");
+        res.status(400).send({ message: "Username not found" });
         return;
     }
 
     const userPassword = userQueryResult['password']
     const isPasswordCorrect = await bcrypt.compare(req.body.password, userPassword);
     if (!isPasswordCorrect) {
-        res.status(400).send("Password incorrect");
+        res.status(400).send({ message: "Password incorrect" });
         return;
     }
 
@@ -74,21 +57,22 @@ router.get("/login", async (req, res) => {
     const token = await generateToken(userId);
 
     res.status(200).send({ token });
-})
 
-router.post("/register", async (req, res) => {
+}
+
+const registerUser = async (req, res) => {
     try {
         registerUserSchema.parse(req.body);
     } catch (err) {
         const validationError = fromZodError(err).toString();
-        res.status(400).send(validationError);
+        res.status(400).send({ message: validationError });
         return;
     }
 
     const userQueryResult = await db.select().table("users").where({ username: req.body.username });
     const userAlreadyExists = userQueryResult.length > 0
     if (userAlreadyExists) {
-        res.status(400).send("Username already registered");
+        res.status(400).send({ message: "Username already registered" });
         return;
     }
 
@@ -102,7 +86,7 @@ router.post("/register", async (req, res) => {
     const token = await generateToken(userId);
 
     res.status(201).send({ token });
-})
+}
 
 const generateToken = async (userId) => {
     const randomHalfToken = () => Math.random().toString(36).substring(2);
@@ -121,4 +105,7 @@ const deleteExistingTokens = async (userId) => {
     await db("tokens").where({ userId }).delete();
 }
 
-export default router;
+router.get("/login", loginUser)
+router.post("/register", registerUser)
+
+module.exports =  { router, loginUser, registerUser };

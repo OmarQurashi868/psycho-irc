@@ -1,12 +1,16 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+const express = require('express');
+const bodyParser = require('body-parser');
 const app = express()
 const PORT = 3000
 
-import userRouter from "./users.js";
-import verifyToken from './userauth.js';
+const { router: userRouter } = require("./routes/users.js");
+const verifyToken = require('./utils/userAuth.js');
+const initTables = require('./utils/database.js');
+
+initTables();
 
 app.use(bodyParser.json());
+
 
 app.use("/users", userRouter);
 
