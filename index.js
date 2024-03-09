@@ -7,12 +7,11 @@ import userRouter from "./users.js";
 
 app.use(bodyParser.json()) // for parsing application/json
 
+app.use("/users", userRouter);
+
 app.get('/', function (req, res) {
     res.send('Hello World')
 })
-
-
-app.use("/users", userRouter);
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)
