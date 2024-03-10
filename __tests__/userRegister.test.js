@@ -58,5 +58,5 @@ it("Should return a status code of 200 when new user is created", async () => {
     await userRegister(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(mockResponse.send).toHaveBeenCalledTimes(1);
+    expect(mockResponse.send).toHaveBeenCalledWith({ token: expect.any(String) });
 });
