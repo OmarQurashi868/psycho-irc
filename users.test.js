@@ -10,14 +10,10 @@ const mockRequest = {
     }
 }
 const mockResponse = {
-    status: () => {
-        jest.fn((x) => x);
-        return this;
-    },
-    send: () => {
-        jest.fn((x) => x);
-        return this;
-    }
+    status: jest.fn((x) => x),
+
+    send: jest.fn((x) => x),
+
 }
 
 it("Should return a status code of 400 when user exists", async () => {
@@ -29,6 +25,6 @@ it("Should return a status code of 400 when user exists", async () => {
 
     await registerUser(mockRequest, mockResponse);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(201);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });

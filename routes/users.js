@@ -25,21 +25,24 @@ const loginUser = async (req, res) => {
         loginUserSchema.parse(req.body);
     } catch (err) {
         const validationError = fromZodError(err).toString();
-        res.status(400).send({ message: validationError });
+        res.status(400);
+        res.send({ message: validationError });
         return
     }
 
     const userQueryResult = await User.find(req.body.username);
     const userNotExist = userQueryResult == null;
     if (userNotExist) {
-        res.status(400).send({ message: "Username not found" });
+        res.status(400);
+        res.send({ message: "Username not found" });
         return;
     }
 
     const userPassword = userQueryResult['password']
     const isPasswordCorrect = await bcrypt.compare(req.body.password, userPassword);
     if (!isPasswordCorrect) {
-        res.status(400).send({ message: "Password incorrect" });
+        res.status(400);
+        res.send({ message: "Password incorrect" });
         return;
     }
 
@@ -48,7 +51,8 @@ const loginUser = async (req, res) => {
     await Token.deleteAllForUser(userId)
     const token = await generateToken(userId);
 
-    res.status(200).send({ token });
+    res.status(200);
+    res.send({ token });
 
 }
 
@@ -57,14 +61,16 @@ const registerUser = async (req, res) => {
         registerUserSchema.parse(req.body);
     } catch (err) {
         const validationError = fromZodError(err).toString();
-        res.status(400).send({ message: validationError });
+        res.status(400);
+        res.send({ message: validationError });
         return;
     }
 
     const userQueryResult = await User.find(req.body.username);
     const userAlreadyExists = userQueryResult != null;
     if (userAlreadyExists) {
-        res.status(400).send({ message: "Username already registered" });
+        res.status(400);
+        res.send({ message: "Username already registered" });
         return;
     }
 
@@ -77,7 +83,8 @@ const registerUser = async (req, res) => {
     await Token.deleteAllForUser(userId)
     const token = await generateToken(userId);
 
-    res.status(201).send({ token });
+    res.status(201);
+    res.send({ token });
 }
 
 const generateToken = async (userId) => {
