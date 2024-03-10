@@ -23,7 +23,7 @@ const loginUser = async (req, res) => {
     const userQueryResult = await User.find(req.body.username);
     const userNotExist = userQueryResult == undefined;
     if (userNotExist) {
-        res.status(400);
+        res.status(404);
         res.send({ message: "Username not found" });
         return;
     }
@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
     const userPassword = userQueryResult['password']
     const isPasswordCorrect = await bcrypt.compare(req.body.password, userPassword);
     if (!isPasswordCorrect) {
-        res.status(400);
+        res.status(403);
         res.send({ message: "Password incorrect" });
         return;
     }

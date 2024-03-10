@@ -1,10 +1,10 @@
-const userRegister = require("./routes/userRegister");
+const userRegister = require("../routes/userRegister");
 const bcrypt = require('bcrypt');
-const User = require("./classes/User");
-const Token = require("./classes/Token");
+const User = require("../classes/User");
+const Token = require("../classes/Token");
 
-jest.mock("./classes/user");
-jest.mock("./classes/token");
+jest.mock("../classes/User");
+jest.mock("../classes/Token");
 jest.mock("bcrypt");
 
 const mockRequest = {
