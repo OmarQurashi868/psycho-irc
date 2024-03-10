@@ -1,5 +1,4 @@
-const knex = require('knex');
-const db = knex({
+const knex = require('knex')({
     client: 'sqlite3',
     connection: {
         filename: './database.db',
@@ -17,7 +16,7 @@ const verifyToken = async (req, res, next) => {
     }
 
     const token = req.body['token']
-    const tokenData = db.select().table("tokens").where({ token }).first();
+    const tokenData = knex.select().table("tokens").where({ token }).first();
     const tokenInvalid = tokenData == null
     if (tokenInvalid) {
         res.status(403).send({ message: "Token is invalid" });
@@ -29,7 +28,7 @@ const verifyToken = async (req, res, next) => {
 
 const purgeExpiredTokens = async () => {
     const currentTime = new Date();
-    db("tokens").where('expiryDate', '<', currentTime).delete();
+    knex("tokens").where('expiryDate', '<', currentTime).delete();
 }
 
 module.exports = verifyToken;
