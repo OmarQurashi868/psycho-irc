@@ -31,7 +31,7 @@ const loginUser = async (req, res) => {
     }
 
     const userQueryResult = await User.find(req.body.username);
-    const userNotExist = userQueryResult == null;
+    const userNotExist = userQueryResult == undefined;
     if (userNotExist) {
         res.status(400);
         res.send({ message: "Username not found" });
@@ -67,7 +67,8 @@ const registerUser = async (req, res) => {
     }
 
     const userQueryResult = await User.find(req.body.username);
-    const userAlreadyExists = userQueryResult != null;
+    console.log(userQueryResult, userQueryResult != undefined);
+    const userAlreadyExists = userQueryResult != undefined;
     if (userAlreadyExists) {
         res.status(400);
         res.send({ message: "Username already registered" });
