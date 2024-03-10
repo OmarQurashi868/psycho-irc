@@ -1,4 +1,4 @@
-const Token = require("../classes/token");
+const Token = require("../classes/Token");
 
 const verifyToken = async (req, res, next) => {
     await Token.purgeExpiredTokens();
@@ -22,4 +22,18 @@ const verifyToken = async (req, res, next) => {
     next();
 }
 
-module.exports = verifyToken;
+const generateToken = async (userId) => {
+    const randomHalfToken = () => Math.random().toString(36).substring(2);
+    const token = randomHalfToken() + randomHalfToken();
+
+    const THREEHOURS = 3 * 60 * 60 * 1000;
+    // eslint-disable-next-line no-unused-vars
+    const FIVESECONDS = 5 * 1000;
+    let expiryDate = new Date();
+    expiryDate.setTime(expiryDate.getTime() + THREEHOURS);
+
+    await Token.insert({ token, userId, expiryDate })
+    return token;
+}
+
+module.exports = { verifyToken, generateToken };

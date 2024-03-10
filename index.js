@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const app = express()
 const PORT = 3000
 
-const { router: userRouter } = require("./routes/users.js");
-const verifyToken = require('./utils/userAuth.js');
+const userRouter = require("./routes/userRouter.js");
+const { verifyToken } = require('./utils/userAuth.js');
 const initTables = require('./utils/database.js');
 
 initTables();
