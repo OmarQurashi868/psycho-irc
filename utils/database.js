@@ -1,10 +1,5 @@
-const knex = require('knex')({
-    client: 'sqlite3',
-    connection: {
-        filename: './database.db',
-    },
-    useNullAsDefault: true,
-});
+const databaseConfig = require('../config/databaseConfig');
+const knex = require('knex')(databaseConfig);
 
 const initTables = async () => {
     const userTableExists = await knex.schema.hasTable("users")

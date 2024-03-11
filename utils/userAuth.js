@@ -1,34 +1,39 @@
-const knex = require('knex')({
-    client: 'sqlite3',
-    connection: {
-        filename: './database.db',
-    },
-    useNullAsDefault: true,
-});
+const Token = require("../classes/Token");
 
 const verifyToken = async (req, res, next) => {
-    await purgeExpiredTokens();
+    await Token.purgeExpiredTokens();
 
-    const tokenMissing = req.body['token'] == null;
+    const tokenMissing = req.body['token'] == undefined;
     if (tokenMissing) {
-        res.status(403).send({ message: "Token is missing" });
+        res.status(403);
+        res.send({ message: "Token is missing" });
         return;
     }
 
     const token = req.body['token']
-    const tokenData = knex.select().table("tokens").where({ token }).first();
-    const tokenInvalid = tokenData == null
+    const tokenData = Token.find(token);
+    const tokenInvalid = tokenData == undefined
     if (tokenInvalid) {
-        res.status(403).send({ message: "Token is invalid" });
+        res.status(403);
+        res.send({ message: "Token is invalid" });
         return;
     }
 
     next();
 }
 
-const purgeExpiredTokens = async () => {
-    const currentTime = new Date();
-    knex("tokens").where('expiryDate', '<', currentTime).delete();
+const generateToken = async (userId) => {
+    const randomHalfToken = () => Math.random().toString(36).substring(2);
+    const token = randomHalfToken() + randomHalfToken();
+
+    const THREEHOURS = 3 * 60 * 60 * 1000;
+    // eslint-disable-next-line no-unused-vars
+    const FIVESECONDS = 5 * 1000;
+    let expiryDate = new Date();
+    expiryDate.setTime(expiryDate.getTime() + THREEHOURS);
+
+    await Token.insert({ token, userId, expiryDate })
+    return token;
 }
 
-module.exports = verifyToken;
+module.exports = { verifyToken, generateToken };
