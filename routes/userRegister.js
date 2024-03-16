@@ -8,7 +8,7 @@ const { generateToken } = require("../utils/userAuth");
 const SALTROUNDS = 10;
 const registerUserSchema = z.object({
     username: z.string(),
-    password: z.string(),
+    password: z.string().min(8, "Password must be 8 characters or longer"),
     passwordConfirmation: z.string()
 })
     .refine(schema => schema.password == schema.passwordConfirmation, "Passwords do not match");

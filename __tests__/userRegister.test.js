@@ -10,6 +10,13 @@ jest.mock("bcrypt");
 const mockRequest = {
     body: {
         username: "johnDoe",
+        password: "testing123",
+        passwordConfirmation: "testing123"
+    }
+}
+const shortMockRequest = {
+    body: {
+        username: "johnDoe",
         password: "testing",
         passwordConfirmation: "testing"
     }
@@ -27,6 +34,14 @@ const mockResponse = {
 it("Should return a status code of 400 when properties are missing", async () => {
 
     await userRegister(incompleteMockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.send).toHaveBeenCalledTimes(1);
+});
+
+it("Should return a status code of 400 when password is short", async () => {
+
+    await userRegister(shortMockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
