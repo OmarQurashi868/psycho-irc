@@ -1,4 +1,4 @@
-# psycho-irc
+# psycho-irc-server
 A simple IRC-like chat server backend. With user authentication and multiple channels support.
 
 # Endpoints
