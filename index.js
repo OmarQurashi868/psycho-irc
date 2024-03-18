@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express()
-const PORT = 3000
+// eslint-disable-next-line no-undef
+const PORT = process.env.PORT || 3000;
 
 const userRouter = require("./routes/userRouter.js");
 const { verifyToken } = require('./utils/userAuth.js');
