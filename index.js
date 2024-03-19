@@ -13,7 +13,7 @@ initTables();
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.send('Hello World')
+    res.send('Hello World');
 })
 
 app.use("/users", userRouter);
@@ -21,5 +21,5 @@ app.use("/users", userRouter);
 app.use(verifyToken);
 
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`)
+    console.log(`Server listening on port ${PORT}`);
 })
