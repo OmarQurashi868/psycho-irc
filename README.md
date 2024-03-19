@@ -2,6 +2,7 @@
 A simple IRC-like chat server backend. With user authentication and multiple channels support.
 
 # Endpoints
+# /users/
 ## POST `{server}/users/register`
 Registers a new user on the server
 ### Body
