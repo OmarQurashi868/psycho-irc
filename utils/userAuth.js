@@ -3,20 +3,20 @@ const Token = require("../classes/Token");
 const verifyToken = async (req, res, next) => {
     await Token.purgeExpiredTokens();
 
-    const tokenMissing = req.body['token'] == undefined;
+    const token = req.get("authToken")
+    const tokenMissing = token == undefined;
     if (tokenMissing) {
-        res.status(403);
+        res.status(400);
         res.send({ message: "Token is missing" });
-        return;
+        return false;
     }
 
-    const token = req.body['token']
-    const tokenData = Token.find(token);
+    const tokenData = await Token.find(token);
     const tokenInvalid = tokenData == undefined
     if (tokenInvalid) {
-        res.status(403);
+        res.status(401);
         res.send({ message: "Token is invalid" });
-        return;
+        return false;
     }
 
     next();

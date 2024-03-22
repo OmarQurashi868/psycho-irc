@@ -1,9 +1,9 @@
 const { z } = require("zod");
 const { fromZodError } = require("zod-validation-error");
 const bcrypt = require("bcrypt");
-const User = require("../classes/User");
-const Token = require("../classes/Token");
-const { generateToken } = require("../utils/userAuth");
+const User = require("../../classes/User");
+const Token = require("../../classes/Token");
+const { generateToken } = require("../../utils/userAuth");
 
 const loginUserSchema = z.object({
     username: z.string(),
@@ -36,7 +36,7 @@ const loginUser = async (req, res) => {
     if (!isPasswordCorrect) {
         const message = "Password incorrect";
         console.log(`Failed login from ${req.body.username}: ${message}`);
-        res.status(403);
+        res.status(401);
         res.send({ message });
         return;
     }

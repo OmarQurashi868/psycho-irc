@@ -1,4 +1,4 @@
-const userLogin = require("../routes/userLogin");
+const loginUser = require("../routes/users/userLogin");
 const bcrypt = require('bcrypt');
 const User = require("../classes/User");
 const Token = require("../classes/Token");
@@ -24,25 +24,22 @@ const mockResponse = {
 }
 
 it("Should return a status code of 400 when properties are missing", async () => {
-
-    await userLogin(incompleteMockRequest, mockResponse);
+    await loginUser(incompleteMockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 
 it("Should return a status code of 404 when user doesn't exist", async () => {
-
     User.find.mockResolvedValueOnce(undefined);
 
-    await userLogin(mockRequest, mockResponse);
+    await loginUser(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(404);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 
-it("Should return a status code of 403 when password is incorrect", async () => {
-
+it("Should return a status code of 401 when password is incorrect", async () => {
     User.find.mockResolvedValueOnce({
         username: "johnDoe",
         password: "testingHashed"
@@ -50,14 +47,13 @@ it("Should return a status code of 403 when password is incorrect", async () => 
 
     bcrypt.compare.mockResolvedValueOnce(false);
 
-    await userLogin(mockRequest, mockResponse);
+    await loginUser(mockRequest, mockResponse);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(403);
+    expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 
 it("Should return a status code of 200 when login is successful", async () => {
-
     User.find.mockResolvedValueOnce({
         username: "johnDoe",
         password: "testingHashed"
@@ -68,7 +64,7 @@ it("Should return a status code of 200 when login is successful", async () => {
     Token.deleteAllForUser.mockResolvedValueOnce();
     Token.insert.mockResolvedValueOnce();
 
-    await userLogin(mockRequest, mockResponse);
+    await loginUser(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith({ token: expect.any(String) });

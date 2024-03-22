@@ -4,10 +4,13 @@ const app = express()
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
 
-const userRouter = require("./routes/userRouter.js");
+const userRouter = require("./routes/users/userRouter.js");
+const channelRouter = require("./routes/channels/channelRouter.js");
 const { verifyToken } = require('./utils/userAuth.js');
 const initTables = require('./utils/database.js');
+const initWss = require("./utils/websocket.js");
 
+initWss();
 initTables();
 
 app.use(bodyParser.json());
@@ -19,6 +22,9 @@ app.get('/', function (req, res) {
 app.use("/users", userRouter);
 
 app.use(verifyToken);
+
+app.use("/channels", channelRouter);
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

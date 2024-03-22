@@ -7,7 +7,7 @@ class Token {
         this.db = db;
     }
     async find(token) {
-        return await knex.select().table("tokens").where({ token }).first();
+        return await this.db("tokens").select().where({ token }).first();
     }
     async insert({ token, userId, expiryDate }) {
         await this.db("tokens").insert({ token, userId, expiryDate });
@@ -17,7 +17,7 @@ class Token {
     }
     async purgeExpiredTokens() {
         const currentTime = new Date();
-        await knex("tokens").where('expiryDate', '<', currentTime).delete();
+        await this.db("tokens").where('expiryDate', '<', currentTime).delete();
     }
 }
 

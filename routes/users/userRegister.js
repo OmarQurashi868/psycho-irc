@@ -1,9 +1,9 @@
 const { z } = require("zod");
 const { fromZodError } = require("zod-validation-error");
 const bcrypt = require("bcrypt");
-const User = require("../classes/User");
-const Token = require("../classes/Token");
-const { generateToken } = require("../utils/userAuth");
+const User = require("../../classes/User");
+const Token = require("../../classes/Token");
+const { generateToken } = require("../../utils/userAuth");
 
 const SALTROUNDS = 10;
 const registerUserSchema = z.object({
