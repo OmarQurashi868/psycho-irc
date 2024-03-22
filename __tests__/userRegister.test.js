@@ -1,4 +1,4 @@
-const userRegister = require("../routes/userRegister");
+const registerUser = require("../routes/users/userRegister");
 const bcrypt = require('bcrypt');
 const User = require("../classes/User");
 const Token = require("../classes/Token");
@@ -32,36 +32,32 @@ const mockResponse = {
 }
 
 it("Should return a status code of 400 when properties are missing", async () => {
-
-    await userRegister(incompleteMockRequest, mockResponse);
+    await registerUser(incompleteMockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 
 it("Should return a status code of 400 when password is short", async () => {
-
-    await userRegister(shortMockRequest, mockResponse);
+    await registerUser(shortMockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 
 it("Should return a status code of 400 when user exists", async () => {
-
     User.find.mockResolvedValueOnce({
         username: "johnDoe",
         password: "testingHashed"
     });
 
-    await userRegister(mockRequest, mockResponse);
+    await registerUser(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 
 it("Should return a status code of 200 when new user is created", async () => {
-
     User.find.mockResolvedValueOnce(undefined);
     User.insert.mockResolvedValueOnce(1);
 
@@ -70,7 +66,7 @@ it("Should return a status code of 200 when new user is created", async () => {
 
     bcrypt.hash.mockResolvedValueOnce("testingHashed");
 
-    await userRegister(mockRequest, mockResponse);
+    await registerUser(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.send).toHaveBeenCalledWith({ token: expect.any(String) });
