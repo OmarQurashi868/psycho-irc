@@ -22,10 +22,10 @@ const mockResponse = {
 }
 const next = jest.fn((x) => x);
 
-it("Should return a status code of 400 if token is missing", async () => {
+it("Should return a status code of 401 if token is missing", async () => {
     await verifyToken(incompleteMockRequest, mockResponse, next);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.status).toHaveBeenCalledWith(401);
     expect(mockResponse.send).toHaveBeenCalledTimes(1);
 });
 

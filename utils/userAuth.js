@@ -1,25 +1,34 @@
 const Token = require("../classes/Token");
 
 const verifyToken = async (req, res, next) => {
+    const token = req.get("authtoken");
+
+    const isTokenValid = await checkTokenValidity(token);
+
+    if (!isTokenValid) {
+        res.status(401);
+        res.send({ message: "authtoken is missing or invalid" });
+        return;
+    }
+
+    next();
+}
+
+const checkTokenValidity = async (token) => {
     await Token.purgeExpiredTokens();
 
-    const token = req.get("authToken")
     const tokenMissing = token == undefined;
     if (tokenMissing) {
-        res.status(400);
-        res.send({ message: "Token is missing" });
         return false;
     }
 
     const tokenData = await Token.find(token);
     const tokenInvalid = tokenData == undefined
     if (tokenInvalid) {
-        res.status(401);
-        res.send({ message: "Token is invalid" });
         return false;
     }
 
-    next();
+    return true;
 }
 
 const generateToken = async (userId) => {
@@ -36,4 +45,4 @@ const generateToken = async (userId) => {
     return token;
 }
 
-module.exports = { verifyToken, generateToken };
+module.exports = { verifyToken, checkTokenValidity, generateToken };
