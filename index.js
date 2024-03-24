@@ -5,27 +5,24 @@ const app = express()
 const PORT = process.env.PORT || 3000;
 
 const userRouter = require("./routes/users/userRouter.js");
-const channelRouter = require("./routes/channels/channelRouter.js");
 const { verifyToken } = require('./utils/userAuth.js');
 const initTables = require('./utils/database.js');
 const initWss = require("./utils/websocket.js");
 
-initWss();
 initTables();
 
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.send('Hello World');
+    res.send({ Hello: "World" });
 })
 
 app.use("/users", userRouter);
 
 app.use(verifyToken);
 
-app.use("/channels", channelRouter);
-
-
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 })
+
+initWss(httpServer);
