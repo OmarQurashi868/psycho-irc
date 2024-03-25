@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Test, build and push docker image
 
 on:
   push:
@@ -52,4 +52,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: user/app
+          repository: ${{ env.REPO }}
+      
+      - name: Test listing files
+        run: echo | ls
