@@ -24,7 +24,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ env.REPO }}:latest,${{ env.REPO }}:${{ github.ref_name }}
+          tags: ${{ env.REPO }},${{ env.REPO }}:${{ github.ref_name }}
 
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v3
