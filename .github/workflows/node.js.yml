@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ REPO }}:latest,${{ REPO }}:1.0.0
+          tags: ${{ env.REPO }}:latest,${{ env.REPO }}:1.0.0
 
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v3
