@@ -1,6 +1,12 @@
 # psycho-irc-server
 A simple IRC-like chat server backend using websockets with user authentication.
 
+# Usage
+- Clone or download the source code
+- Open a terminal session in the root folder
+- Run `npm install`
+- Once it's done, run `npm run start`
+
 # Config
 The port is 3000 by default, this can be changed by any of these:
 - Setting a different port to the environment variable `PORT`
@@ -14,6 +20,7 @@ The server name can be changed by setting the evnrionment variable `SERVER_NAME`
 > PORT=3000
 > SERVER_NAME=My server
 > ```
+> **You must run the server with `npm run start-env` if using a local `.env file`**
 
 # Endpoints
 # /users/

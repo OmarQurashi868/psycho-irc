@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node --env-file=.env index.js",
-    "start-no-env": "node index.js"
+    "start": "node index.js",
+    "start-env": "node --env-file=.env index.js"
   },
   "author": "OmarQurashi868",
   "license": "ISC",
