@@ -1,6 +1,20 @@
 # psycho-irc-server
 A simple IRC-like chat server backend. With user authentication and multiple channels support.
 
+# Config
+The port is 3000 by default, this can be changed by any of these:
+- Setting a different port to the environment variable `PORT`
+- Changing the port variable in index.js
+- (Docker only) Forwarding the exposed port 3000 to any other port
+The server name can be changed by setting the evnrionment variable `SERVER_NAME`.
+
+> [!TIP]
+> If you don't have easy access to environment variables, create a file named `.env` in the root folder and set your variables there:
+> ```
+> PORT=3000
+> SERVER_NAME=My server
+> ```
+
 # Endpoints
 # /users/
 Both endpoints should return a json message containing a `token` key that is used to connect to the Websocket server.

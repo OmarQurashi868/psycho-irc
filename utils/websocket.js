@@ -2,7 +2,7 @@ const { WebSocket, WebSocketServer } = require('ws');
 const { checkTokenValidity } = require("../utils/userAuth");
 const User = require("../classes/User");
 // eslint-disable-next-line no-undef
-const NAME = process.env.NAME || "My server";
+const NAME = process.env.SERVER_NAME || "My server";
 
 
 const initWss = (httpServer) => {
