@@ -1,5 +1,5 @@
 # psycho-irc-server
-A simple IRC-like chat server backend. With user authentication and multiple channels support.
+A simple IRC-like chat server backend using websockets with user authentication.
 
 # Endpoints
 # /users/
