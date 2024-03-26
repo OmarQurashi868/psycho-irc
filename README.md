@@ -1,5 +1,5 @@
 # psycho-irc-server
-A simple IRC-like chat server backend. With user authentication and multiple channels support.
+A simple IRC-like chat server backend using websockets with user authentication.
 
 # Config
 The port is 3000 by default, this can be changed by any of these:
