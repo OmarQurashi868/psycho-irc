@@ -8,14 +8,15 @@ jest.mock("../classes/Token");
 jest.mock("bcrypt");
 
 const mockRequest = {
-    body: {
-        username: "johnDoe",
-        password: "testing",
+    headers: {
+        // eslint-disable-next-line no-undef
+        authorization: "Basic " + Buffer.from("johnDoe:testing").toString("base64")
     }
 }
 const incompleteMockRequest = {
-    body: {
-        username: "johnDoe",
+    headers: {
+        // eslint-disable-next-line no-undef
+        authorization: "Basic " + Buffer.from("johnDoe").toString("base64")
     }
 }
 const mockResponse = {
