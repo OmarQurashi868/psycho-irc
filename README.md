@@ -28,12 +28,10 @@ The server name can be changed by setting the evnrionment variable `SERVER_NAME`
 Both endpoints should return a json message containing a `token` key that is used to connect to the Websocket server.
 ## POST `{server}/users/register`
 Registers a new user on the server
-### Body
+### headers
 ```
 {
-    username: "username",
-    password: "password",
-    passwordConfirmation: "password"
+    authorization: "Basic <base64 encoding of 'username:password'>"
 }
 ```
 
