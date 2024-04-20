@@ -10,7 +10,7 @@ const loginUser = async (req, res) => {
     const [username, password] = Buffer.from(b64auth, 'base64').toString().split(':');
 
     if (!username || !password) {
-        console.log(`Failed login from ${username}: Missing username or password`);
+        console.log(currentdate.toLocaleString()+ ` Failed login from ${username}: Missing username or password`);
         res.status(400);
         res.send({ message: "Missing username or password" });
         return
@@ -20,7 +20,7 @@ const loginUser = async (req, res) => {
     const userNotExist = userQueryResult == undefined;
     if (userNotExist) {
         const message = "Username not found";
-        console.log(`Failed login from ${username}: ${message}`);
+        console.log(currentdate.toLocaleString()+ " >"  + `Failed login from ${username}: ${message}`);
         res.status(404);
         res.send({ message });
         return;
@@ -30,7 +30,7 @@ const loginUser = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, userPassword);
     if (!isPasswordCorrect) {
         const message = "Password incorrect";
-        console.log(`Failed login from ${username}: ${message}`);
+        console.log(currentdate.toLocaleString()+ " >" + ` Failed login from ${username}: ${message}`);
         res.status(401);
         res.send({ message });
         return;
@@ -41,7 +41,7 @@ const loginUser = async (req, res) => {
     await Token.deleteAllForUser(userId)
     const token = await generateToken(userId);
 
-    console.log(`User logged in successfully: ${username}`);
+    console.log(currentdate.toLocaleString()+ " >"  +  ` User logged in successfully: ${username}`);
     res.status(200);
     res.send({ token });
 }

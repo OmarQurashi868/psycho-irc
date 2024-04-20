@@ -7,11 +7,11 @@ const NAME = process.env.SERVER_NAME || "My server";
 
 const initWss = (httpServer) => {
     const wss = new WebSocketServer({ noServer: true });
-    console.log(`Websocket server listening`);
+    console.log(currentdate.toLocaleString()+ " >" +` Websocket server listening`);
 
     httpServer.on("upgrade", async (req, socket, head) => {
         socket.on('error', () => {
-            console.log("Error occured at socket upgrade")
+            console.log(currentdate.toLocaleString()+ " >" +" Error occured at socket upgrade")
         });
         const token = req.headers["authtoken"];
 
@@ -19,12 +19,12 @@ const initWss = (httpServer) => {
         if (!isTokenValid) {
             socket.write('HTTP/1.1 401 Unauthorized\r\nContent-Length: 45\r\nContent-Type: application/json\r\n\r\n{"message":"authtoken is missing or invalid"}');
             socket.destroy();
-            console.log("Failed connection attempt");
+            console.log(currentdate.toLocaleString()+ " >" +" Failed connection attempt");
             return;
         }
 
         socket.removeListener('error', () => {
-            console.log("Error occured at socket listener remove")
+            console.log(currentdate.toLocaleString()+ " >" +" Error occured at socket listener remove")
         });
         wss.handleUpgrade(req, socket, head, (ws) => {
             wss.emit("connection", ws, req);
@@ -68,7 +68,7 @@ const initWss = (httpServer) => {
                 client.send(payload);
             }
         });
-        console.log(`user connected successfully: ${username}`);
+        console.log(currentdate.toLocaleString()+ " >" +` user connected successfully: ${username}`);
     });
 }
 

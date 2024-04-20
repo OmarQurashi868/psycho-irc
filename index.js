@@ -26,7 +26,7 @@ app.use("/users", userRouter);
 app.use(verifyToken);
 
 const httpServer = app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    console.log(currentdate.toLocaleString()+ " >" +` Server listening on port ${PORT}`);
 })
 
 initWss(httpServer);
