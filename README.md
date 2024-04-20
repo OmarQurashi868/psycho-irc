@@ -6,6 +6,8 @@ A simple IRC-like chat server backend using websockets with user authentication.
 - Open a terminal session in the root folder
 - Run `npm install`
 - Once it's done, run `npm run start`
+## Or just use Docker:
+- [Image link](https://hub.docker.com/r/omarqurashi868/psycho-irc-server)
 
 # Config
 The port is 3000 by default, this can be changed by any of these:
