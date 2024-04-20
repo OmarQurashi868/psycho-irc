@@ -68,7 +68,7 @@ const initWss = (httpServer) => {
                 client.send(payload);
             }
         });
-        log(`user connected successfully: ${username}`);
+        log(`User connected successfully: ${username}`);
     });
 }
 
