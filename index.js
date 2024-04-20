@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
-
+const log = require('./utils/logger.js');
 const app = express()
 app.use(cors());
 
@@ -26,7 +26,7 @@ app.use("/users", userRouter);
 app.use(verifyToken);
 
 const httpServer = app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    log(`Server listening on port ${PORT}`);
 })
 
 initWss(httpServer);
