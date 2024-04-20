@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
+
 const app = express()
+app.use(cors());
+
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
 
