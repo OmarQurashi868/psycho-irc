@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const User = require("../../classes/User");
 const Token = require("../../classes/Token");
 const { generateToken } = require("../../utils/userAuth");
+const log = require("../../utils/logger");
 
 const SALTROUNDS = 10;
 const registerUserSchema = z.object({
@@ -19,7 +20,7 @@ const registerUser = async (req, res) => {
         registerUserSchema.parse(req.body);
     } catch (err) {
         const validationError = fromZodError(err).toString();
-        console.log(currentdate.toLocaleString() +  `Failed registeration from ${req.body.username}: ${validationError}`);
+        log(`Failed registeration from ${req.body.username}: ${validationError}`);
         res.status(400);
         res.send({ message: validationError });
         return;
@@ -29,7 +30,7 @@ const registerUser = async (req, res) => {
     const userAlreadyExists = userQueryResult != undefined;
     if (userAlreadyExists) {
         const message = "Username already registered";
-        console.log(currentdate.toLocaleString() + " >" +  ` Failed registeration from ${req.body.username}: ${message}`);
+        log(`Failed registeration from ${req.body.username}: ${message}`);
         res.status(400);
         res.send({ message });
         return;
@@ -44,7 +45,7 @@ const registerUser = async (req, res) => {
     await Token.deleteAllForUser(userId)
     const token = await generateToken(userId);
 
-    console.log(currentdate.toLocaleString()+ " >" +` User registered successfully: ${req.body.username}`);
+    log(`User registered successfully: ${req.body.username}`);
     res.status(201);
     res.send({ token });
 }
