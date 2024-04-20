@@ -3,6 +3,7 @@ A simple IRC-like chat server backend using websockets with user authentication.
 
 # Usage
 - Clone or download the source code
+- Install Node
 - Open a terminal session in the root folder
 - Run `npm install`
 - Once it's done, run `npm run start`
