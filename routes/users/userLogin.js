@@ -41,7 +41,7 @@ const loginUser = async (req, res) => {
 
     await Token.deleteAllForUser(userId)
     const token = await generateToken(userId);
-    log(` User logged in successfully: ${username}`);
+    log(`User logged in successfully: ${username}`);
     res.status(200);
     res.send({ token });
 }
